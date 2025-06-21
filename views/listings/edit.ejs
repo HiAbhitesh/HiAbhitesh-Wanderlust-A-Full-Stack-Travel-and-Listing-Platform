@@ -1,0 +1,73 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="card shadow-lg p-4 rounded-4">
+            <h2 class="text-center mb-4">Edit Your Listing</h2>
+            <form action="/listings/<%= listing._id %>?_method=PUT" method="POST" novalidate class="needs-validation">
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input name="listing[title]" type="text" class="form-control" value="<%= listing.title %>" required/>
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Please provide a title.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="listing[description]" class="form-control" rows="3" required><%= listing.description %></textarea>
+                    <div class="valid-feedback">Looks good!</div>
+                    <div class="invalid-feedback">Please enter a short description.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Listing Image URL</label>
+                    <input name="listing[image]" type="text" class="form-control" value="<%= listing.image %>" required/>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input name="listing[price]" type="number" class="form-control" placeholder="1200" required value="<%= listing.price %>" />
+                        <div class="invalid-feedback">Please enter a valid price.</div>
+                    </div>
+
+                    <div class="col-md-8 mb-3">
+                        <label for="country" class="form-label">Country</label>
+                        <input name="listing[country]" type="text" class="form-control" placeholder="India"
+                            value="<%= listing.country%>" required/>
+                        <div class="invalid-feedback">Please enter a valid country name.</div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="location" class="form-label">Location</label>
+                    <input name="listing[location]" type="text" class="form-control" placeholder="Jaipur, Rajasthan"
+                        value="<%= listing.location %>" required/>
+                    <div class="invalid-feedback">Please enter a valid location.</div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary px-5 py-2">Update Listing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Optional: Add this script at the bottom of this EJS file (if not already globally included) -->
+<script>
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script>
