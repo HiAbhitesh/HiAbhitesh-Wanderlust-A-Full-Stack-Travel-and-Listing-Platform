@@ -3,8 +3,8 @@
     <h3>All Listings</h3>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
     <% for(let listing of allListings) { %>
-    <div class="col">
-      <div class="card h-100">
+    <div class="col listing">
+      <div class="card listing-card h-100">
         <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
           <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image"
             style="height: 20rem; object-fit: cover;">

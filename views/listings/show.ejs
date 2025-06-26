@@ -2,28 +2,28 @@
 
     <div class="row mt-3">
         <div class="col-8 offset-2">
-            <h3>Listing Details: <%= listing._id %>
+            <h3>
+                <%= listing.title %>
             </h3>
 
-            <div class="card">
-                <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing_image">
-                <div class="card-body">
-                    <p class="card-text">
-                        <b>
-                            <%= listing.title %>
-                        </b><br>
-                        <%= listing.description %> <br>
-                            <% if (listing.price !=null) { %>
-                                &#8377;<%= listing.price.toLocaleString("en-IN") %> for 1 night<br>
-                                    <% } else { %>
-                                        Price not available<br>
-                                        <% } %>
-                                            <%= listing.location %> <br>
-                                                <%= listing.country %>
-                    </p>
-                </div>
+            <!-- Listing Image -->
+            <img src="<%= listing.image.url %>" class="card-img-top show-img rounded" alt="listing_image">
+
+            <!-- Listing Info -->
+            <div class="card-body px-0">
+                <p class="card-text">
+                    <%= listing.description %> <br>
+                        <% if (listing.price !=null) { %>
+                            &#8377;<%= listing.price.toLocaleString("en-IN") %> for 1 night<br>
+                                <% } else { %>
+                                    Price not available<br>
+                                    <% } %>
+                                        <%= listing.location %><br>
+                                            <%= listing.country %>
+                </p>
             </div>
 
+            <!-- Edit & Delete Buttons Aligned with Card -->
             <div class="d-flex gap-3 mt-3 mb-5">
                 <a href="/listings/<%= listing._id %>/edit" class="btn btn-danger px-4">Edit</a>
                 <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
@@ -33,3 +33,84 @@
 
         </div>
     </div>
+
+
+    <!-- Review Form -->
+    <div class="col-8 offset-2 mb-3">
+        <hr />
+        <h4 class="text-secondary mb-3">Leave a Review</h4>
+        <form action="/listings/<%= listing._id %>/reviews" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="rating" class="form-label fw-semibold">Rating: <span id="ratingValue"
+                        class="text-warning fw-bold">3</span> ⭐</label>
+                <input type="range" min="1" max="5" value="3" id="rating" name="review[rating]" class="form-range"
+                    oninput="document.getElementById('ratingValue').innerText = this.value" />
+            </div>
+
+            <div class="mb-3 mt-3">
+                <label for="comment" class="form-label fw-semibold">Comments</label>
+                <textarea name="review[comment]" id="comment" class="form-control" rows="4"
+                    placeholder="Write your review..." required></textarea>
+                <div class="invalid-feedback">
+                    Please submit a comment for your review.
+                </div>
+            </div>
+
+            <button class="btn btn-dark">
+                <i class="bi bi-send-fill me-1"></i> Submit
+            </button>
+        </form>
+
+        <!-- All Reviews -->
+        <hr class="mt-5" />
+        <h5 class="mb-3">
+            <i class="bi bi-chat-left-text-fill text-dark me-2"></i><b>All Reviews</b>
+        </h5>
+
+        <div class="container">
+            <div class="row row-cols-1 row-cols-md-2 g-4">
+                <% for (let review of listing.reviews) { %>
+                    <div class="col">
+                        <div class="card h-100 shadow-sm border rounded-3 p-3">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div class="mb-2">
+                                    <h6 class="card-title fw-bold text-dark">Anonymous User</h6>
+                                    <p class="card-text text-muted mb-2">
+                                        <%= review.comment %>
+                                    </p>
+                                    <p class="card-text">
+                                        <span class="text-warning fw-bold">
+                                            <%= review.rating %> stars ⭐
+                                        </span>
+                                    </p>
+                                </div>
+                                <form method="POST"
+                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                                    <button class="btn btn-sm btn-dark">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+
+
+        <!-- Optional: Add this script at the bottom of this EJS file (if not already globally included) -->
+        <script>
+            (() => {
+                'use strict';
+                const forms = document.querySelectorAll('.needs-validation');
+                Array.from(forms).forEach(form => {
+                    form.addEventListener('submit', event => {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            })();
+        </script>
